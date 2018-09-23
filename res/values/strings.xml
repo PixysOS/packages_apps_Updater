@@ -69,7 +69,7 @@
     <string name="menu_copy_url">Copy URL</string>
     <string name="menu_export_update">Export update</string>
     <string name="menu_show_changelog">Show changelog</string>
-    <string name="menu_changelog_url" translatable="false">http://github.com/PixysOS/official_devices/changelogs/<xliff:g id="device_name">%1$s</xliff:g>/changes</string>
+    <string name="menu_changelog_url" translatable="false">https://raw.githubusercontent.com/PixysOS/official_devices/blob/pie/changelogs/<xliff:g id="device_name">%1$s</xliff:g>/changelogs</string>
     <string name="menu_ab_perf_mode">Prioritize update process</string>
 
     <string name="snack_updates_found">New updates found</string>

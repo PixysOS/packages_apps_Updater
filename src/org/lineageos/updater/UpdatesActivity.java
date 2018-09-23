@@ -125,8 +125,7 @@ public class UpdatesActivity extends UpdatesListActivity {
 
         TextView headerDeviceName = (TextView) findViewById(R.id.header_device_name);
         headerDeviceName.setText(
-                getString(R.string.header_device_name, BuildInfoUtils.getDevice());
-        );
+               getString(R.string.list_device_name, BuildInfoUtils.getDevice()));
 
         TextView headerBuildDate = (TextView) findViewById(R.id.header_build_date);
         headerBuildDate.setText(StringGenerator.getDateLocalizedUTC(this,
