@@ -123,6 +123,11 @@ public class UpdatesActivity extends UpdatesListActivity {
         headerBuildVersion.setText(
                 getString(R.string.header_android_version, Build.VERSION.RELEASE));
 
+        TextView headerDeviceName = (TextView) findViewById(R.id.header_device_name);
+        headerDeviceName.setText(
+                getString(R.string.header_device_name, BuildInfoUtils.getDevice());
+        );
+
         TextView headerBuildDate = (TextView) findViewById(R.id.header_build_date);
         headerBuildDate.setText(StringGenerator.getDateLocalizedUTC(this,
                 DateFormat.LONG, BuildInfoUtils.getBuildDateTimestamp()));
