@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +16,7 @@
  */
 package org.lineageos.updater.misc;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -29,6 +32,7 @@ import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -37,8 +41,8 @@ import org.json.JSONObject;
 import org.lineageos.updater.R;
 import org.lineageos.updater.UpdatesDbHelper;
 import org.lineageos.updater.controller.UpdaterService;
-import org.lineageos.updater.model.UpdateBaseInfo;
 import org.lineageos.updater.model.Update;
+import org.lineageos.updater.model.UpdateBaseInfo;
 import org.lineageos.updater.model.UpdateInfo;
 
 import java.io.BufferedReader;
@@ -91,10 +95,12 @@ public class Utils {
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
         update.setVersion(object.getString("version"));
+        update.setXdaThreadUrl(object.getString("xda_thread_url"));
+        update.setDonationUrl(object.getString("donation_url"));
         return update;
     }
 
-    public static boolean isCompatible(UpdateBaseInfo update) {
+    private static boolean isCompatible(UpdateBaseInfo update) {
         if (!SystemProperties.getBoolean(Constants.PROP_UPDATER_ALLOW_DOWNGRADING, false) &&
                 update.getTimestamp() <= SystemProperties.getLong(Constants.PROP_BUILD_DATE, 0)) {
             Log.d(TAG, update.getName() + " is older than/equal to the current build");
@@ -116,14 +122,13 @@ public class Utils {
             throws IOException, JSONException {
         List<UpdateInfo> updates = new ArrayList<>();
 
-        String json = "";
+        StringBuilder json = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            for (String line; (line = br.readLine()) != null;) {
-                json += line;
+            for (String line; (line = br.readLine()) != null; ) {
+                json.append(line);
             }
         }
-
-        JSONObject obj = new JSONObject(json);
+        JSONObject obj = new JSONObject(json.toString());
         JSONArray updatesList = obj.getJSONArray("response");
         for (int i = 0; i < updatesList.length(); i++) {
             if (updatesList.isNull(i)) {
@@ -162,12 +167,12 @@ public class Utils {
         String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
                 SystemProperties.get(Constants.PROP_DEVICE));
 
-		String changelogUrl = SystemProperties.get(Constants.PROP_CHANGELOG_URL);
-		if (changelogUrl.trim().isEmpty()) {
-			changelogUrl = context.getString(R.string.menu_changelog_url);
-		}
+        String changelogUrl = SystemProperties.get(Constants.PROP_CHANGELOG_URL);
+        if (changelogUrl.trim().isEmpty()) {
+            changelogUrl = context.getString(R.string.menu_changelog_url);
+        }
 
-		return changelogUrl.replace("{device}", device);
+        return changelogUrl.replace("{device}", device);
     }
 
     public static void triggerUpdate(Context context, String downloadId) {
@@ -222,7 +227,7 @@ public class Utils {
     /**
      * Get the offset to the compressed data of a file inside the given zip
      *
-     * @param zipFile input zip file
+     * @param zipFile   input zip file
      * @param entryPath full path of the entry
      * @return the offset of the compressed, or -1 if not found
      * @throws IllegalArgumentException if the given entry is not found
@@ -249,7 +254,7 @@ public class Utils {
         throw new IllegalArgumentException("The given entry was not found");
     }
 
-    public static void removeUncryptFiles(File downloadPath) {
+    private static void removeUncryptFiles(File downloadPath) {
         File[] uncryptFiles = downloadPath.listFiles(
                 (dir, name) -> name.endsWith(Constants.UNCRYPT_FILE_EXT));
         if (uncryptFiles == null) {
@@ -343,7 +348,7 @@ public class Utils {
         return SystemProperties.getBoolean(Constants.PROP_AB_DEVICE, false);
     }
 
-    public static boolean isABUpdate(ZipFile zipFile) {
+    private static boolean isABUpdate(ZipFile zipFile) {
         return zipFile.getEntry(Constants.AB_PAYLOAD_BIN_PATH) != null &&
                 zipFile.getEntry(Constants.AB_PAYLOAD_PROPERTIES_PATH) != null;
     }
@@ -393,5 +398,14 @@ public class Utils {
             default:
                 return -1;
         }
+    }
+
+    public static int getUnitaInDip(Activity mActivity, int uniInDip) {
+        Resources r = mActivity.getResources();
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                uniInDip,
+                r.getDisplayMetrics()
+        );
     }
 }

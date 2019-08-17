@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -58,9 +59,9 @@ public class HttpURLConnectionClient implements DownloadClient {
     }
 
     HttpURLConnectionClient(String url, File destination,
-            DownloadClient.ProgressListener progressListener,
-            DownloadClient.DownloadCallback callback,
-            boolean useDuplicateLinks) throws IOException {
+                            DownloadClient.ProgressListener progressListener,
+                            DownloadClient.DownloadCallback callback,
+                            boolean useDuplicateLinks) throws IOException {
         mClient = (HttpURLConnection) new URL(url).openConnection();
         mDestination = destination;
         mProgressListener = progressListener;
@@ -181,6 +182,7 @@ public class HttpURLConnectionClient implements DownloadClient {
             class DuplicateLink {
                 private String mUrl;
                 private int mPriority;
+
                 private DuplicateLink(String url, int priority) {
                     mUrl = url;
                     mPriority = priority;
@@ -214,7 +216,7 @@ public class HttpURLConnectionClient implements DownloadClient {
             }
 
             String newUrl = mClient.getHeaderField("Location");
-            for (;;) {
+            for (; ; ) {
                 try {
                     URL url = new URL(newUrl);
                     if (!url.getProtocol().equals(protocol)) {

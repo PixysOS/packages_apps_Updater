@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,11 +25,13 @@ public class UpdateBase implements UpdateBaseInfo {
     private String mType;
     private String mVersion;
     private long mFileSize;
+    private String mXdaForumUrl;
+    private String mDonationUrl;
 
-    public UpdateBase() {
+    UpdateBase() {
     }
 
-    public UpdateBase(UpdateBaseInfo update) {
+    UpdateBase(UpdateBaseInfo update) {
         mName = update.getName();
         mDownloadUrl = update.getDownloadUrl();
         mDownloadId = update.getDownloadId();
@@ -36,6 +39,8 @@ public class UpdateBase implements UpdateBaseInfo {
         mType = update.getType();
         mVersion = update.getVersion();
         mFileSize = update.getFileSize();
+        mXdaForumUrl = update.getXdaThreadUrl();
+        mDonationUrl = update.getDonationUrl();
     }
 
     @Override
@@ -99,5 +104,23 @@ public class UpdateBase implements UpdateBaseInfo {
 
     public void setFileSize(long fileSize) {
         mFileSize = fileSize;
+    }
+
+    @Override
+    public String getXdaThreadUrl() {
+        return mXdaForumUrl;
+    }
+
+    public void setXdaThreadUrl(String xdaForumUrl) {
+        mXdaForumUrl = xdaForumUrl;
+    }
+
+    @Override
+    public String getDonationUrl() {
+        return mDonationUrl;
+    }
+
+    public void setDonationUrl(String donationUrl) {
+        mDonationUrl = donationUrl;
     }
 }

@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class PermissionsUtils {
 
-    public static boolean hasPermission(Context context, String permission) {
+    private static boolean hasPermission(Context context, String permission) {
         int permissionState = context.checkSelfPermission(permission);
         return permissionState == PackageManager.PERMISSION_GRANTED;
     }
@@ -33,13 +34,13 @@ public class PermissionsUtils {
     /**
      * Check the given permissions and requests them if needed.
      *
-     * @param activity The target activity
+     * @param activity    The target activity
      * @param permissions The permissions to check
      * @param requestCode @see Activity#requestPermissions(String[] , int)
      * @return true if the permission is granted, false otherwise
      */
-    public static boolean checkAndRequestPermissions(final Activity activity,
-            final String[] permissions, final int requestCode) {
+    private static boolean checkAndRequestPermissions(final Activity activity,
+                                                      final String[] permissions, final int requestCode) {
         List<String> permissionsList = new ArrayList<>();
         for (String permission : permissions) {
             if (!hasPermission(activity, permission)) {

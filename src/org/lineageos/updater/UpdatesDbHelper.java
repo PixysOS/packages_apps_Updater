@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,20 +31,8 @@ import java.util.List;
 
 public class UpdatesDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "updates.db";
-
-    public static class UpdateEntry implements BaseColumns {
-        public static final String TABLE_NAME = "updates";
-        public static final String COLUMN_NAME_STATUS = "status";
-        public static final String COLUMN_NAME_PATH = "path";
-        public static final String COLUMN_NAME_DOWNLOAD_ID = "download_id";
-        public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
-        public static final String COLUMN_NAME_TYPE = "type";
-        public static final String COLUMN_NAME_VERSION = "version";
-        public static final String COLUMN_NAME_SIZE = "size";
-    }
-
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "updates.db";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + UpdateEntry.TABLE_NAME + " (" +
                     UpdateEntry._ID + " INTEGER PRIMARY KEY," +
@@ -54,7 +43,6 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
                     UpdateEntry.COLUMN_NAME_TYPE + " TEXT," +
                     UpdateEntry.COLUMN_NAME_VERSION + " TEXT," +
                     UpdateEntry.COLUMN_NAME_SIZE + " INTEGER)";
-
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + UpdateEntry.TABLE_NAME;
 
@@ -88,7 +76,7 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
         return db.insert(UpdateEntry.TABLE_NAME, null, values);
     }
 
-    public long addUpdateWithOnConflict(Update update, int conflictAlgorithm) {
+    public void addUpdateWithOnConflict(Update update, int conflictAlgorithm) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UpdateEntry.COLUMN_NAME_STATUS, update.getPersistentStatus());
@@ -98,14 +86,14 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
         values.put(UpdateEntry.COLUMN_NAME_TYPE, update.getType());
         values.put(UpdateEntry.COLUMN_NAME_VERSION, update.getVersion());
         values.put(UpdateEntry.COLUMN_NAME_SIZE, update.getFileSize());
-        return db.insertWithOnConflict(UpdateEntry.TABLE_NAME, null, values, conflictAlgorithm);
+        db.insertWithOnConflict(UpdateEntry.TABLE_NAME, null, values, conflictAlgorithm);
     }
 
-    public boolean removeUpdate(String downloadId) {
+    public void removeUpdate(String downloadId) {
         SQLiteDatabase db = getWritableDatabase();
         String selection = UpdateEntry.COLUMN_NAME_DOWNLOAD_ID + " = ?";
         String[] selectionArgs = {downloadId};
-        return db.delete(UpdateEntry.TABLE_NAME, selection, selectionArgs) != 0;
+        db.delete(UpdateEntry.TABLE_NAME, selection, selectionArgs);
     }
 
     public boolean removeUpdate(long rowId) {
@@ -114,10 +102,10 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
         return db.delete(UpdateEntry.TABLE_NAME, selection, null) != 0;
     }
 
-    public boolean changeUpdateStatus(Update update) {
+    public void changeUpdateStatus(Update update) {
         String selection = UpdateEntry.COLUMN_NAME_DOWNLOAD_ID + " = ?";
         String[] selectionArgs = {update.getDownloadId()};
-        return changeUpdateStatus(selection, selectionArgs, update.getPersistentStatus());
+        changeUpdateStatus(selection, selectionArgs, update.getPersistentStatus());
     }
 
     public boolean changeUpdateStatus(long rowId, int status) {
@@ -126,7 +114,7 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
     }
 
     private boolean changeUpdateStatus(String selection, String[] selectionArgs,
-            int status) {
+                                       int status) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UpdateEntry.COLUMN_NAME_STATUS, status);
@@ -153,7 +141,7 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
         return getUpdates(null, null);
     }
 
-    public List<Update> getUpdates(String selection, String[] selectionArgs) {
+    private List<Update> getUpdates(String selection, String[] selectionArgs) {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
                 UpdateEntry.COLUMN_NAME_PATH,
@@ -191,5 +179,16 @@ public class UpdatesDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return updates;
+    }
+
+    static class UpdateEntry implements BaseColumns {
+        static final String TABLE_NAME = "updates";
+        static final String COLUMN_NAME_STATUS = "status";
+        static final String COLUMN_NAME_PATH = "path";
+        static final String COLUMN_NAME_DOWNLOAD_ID = "download_id";
+        static final String COLUMN_NAME_TIMESTAMP = "timestamp";
+        static final String COLUMN_NAME_TYPE = "type";
+        static final String COLUMN_NAME_VERSION = "version";
+        static final String COLUMN_NAME_SIZE = "size";
     }
 }
