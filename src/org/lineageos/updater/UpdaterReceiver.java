@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,8 +25,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.os.SystemProperties;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.preference.PreferenceManager;
+
+import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import org.lineageos.updater.misc.BuildInfoUtils;
 import org.lineageos.updater.misc.Constants;

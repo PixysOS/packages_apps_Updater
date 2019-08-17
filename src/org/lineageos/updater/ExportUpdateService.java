@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2019 The PixysOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,9 +23,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import org.lineageos.updater.misc.FileUtils;
 
@@ -34,16 +36,12 @@ import java.text.NumberFormat;
 
 public class ExportUpdateService extends Service {
 
-    private static final String TAG = "ExportUpdateService";
-
-    private static final int NOTIFICATION_ID = 16;
-
     public static final String ACTION_START_EXPORTING = "start_exporting";
-    public static final String ACTION_STOP_EXPORTING = "stop_exporting";
-
+    private static final String ACTION_STOP_EXPORTING = "stop_exporting";
     public static final String EXTRA_SOURCE_FILE = "source_file";
     public static final String EXTRA_DEST_FILE = "dest_file";
-
+    private static final String TAG = "ExportUpdateService";
+    private static final int NOTIFICATION_ID = 16;
     private static final String EXPORT_NOTIFICATION_CHANNEL =
             "export_notification_channel";
 
@@ -90,48 +88,6 @@ public class ExportUpdateService extends Service {
         }
 
         return START_NOT_STICKY;
-    }
-
-    private class ExportRunnable implements Runnable {
-        private File mSource;
-        private File mDestination;
-        private FileUtils.ProgressCallBack mProgressCallBack;
-        private Runnable mRunnableComplete;
-        private Runnable mRunnableFailed;
-
-        private ExportRunnable(File source, File destination,
-                FileUtils.ProgressCallBack progressCallBack,
-                Runnable runnableComplete, Runnable runnableFailed) {
-            mSource = source;
-            mDestination = destination;
-            mProgressCallBack = progressCallBack;
-            mRunnableComplete = runnableComplete;
-            mRunnableFailed = runnableFailed;
-        }
-
-        @Override
-        public void run() {
-            try {
-                FileUtils.copyFile(mSource, mDestination, mProgressCallBack);
-                mIsExporting = false;
-                if (!mExportThread.isInterrupted()) {
-                    Log.d(TAG, "Completed");
-                    mRunnableComplete.run();
-                } else {
-                    Log.d(TAG, "Aborted");
-                }
-            } catch (IOException e) {
-                mIsExporting = false;
-                Log.e(TAG, "Could not copy file", e);
-                mRunnableFailed.run();
-            } finally {
-                stopSelf();
-            }
-        }
-
-        private void cleanUp() {
-            mDestination.delete();
-        }
     }
 
     private void startExporting(File source, File destination) {
@@ -211,5 +167,47 @@ public class ExportUpdateService extends Service {
         final Intent intent = new Intent(this, ExportUpdateService.class);
         intent.setAction(ACTION_STOP_EXPORTING);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private class ExportRunnable implements Runnable {
+        private final File mSource;
+        private final File mDestination;
+        private final FileUtils.ProgressCallBack mProgressCallBack;
+        private final Runnable mRunnableComplete;
+        private final Runnable mRunnableFailed;
+
+        private ExportRunnable(File source, File destination,
+                               FileUtils.ProgressCallBack progressCallBack,
+                               Runnable runnableComplete, Runnable runnableFailed) {
+            mSource = source;
+            mDestination = destination;
+            mProgressCallBack = progressCallBack;
+            mRunnableComplete = runnableComplete;
+            mRunnableFailed = runnableFailed;
+        }
+
+        @Override
+        public void run() {
+            try {
+                FileUtils.copyFile(mSource, mDestination, mProgressCallBack);
+                mIsExporting = false;
+                if (!mExportThread.isInterrupted()) {
+                    Log.d(TAG, "Completed");
+                    mRunnableComplete.run();
+                } else {
+                    Log.d(TAG, "Aborted");
+                }
+            } catch (IOException e) {
+                mIsExporting = false;
+                Log.e(TAG, "Could not copy file", e);
+                mRunnableFailed.run();
+            } finally {
+                stopSelf();
+            }
+        }
+
+        private void cleanUp() {
+            mDestination.delete();
+        }
     }
 }
