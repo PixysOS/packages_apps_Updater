@@ -24,6 +24,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
+        applicationId "org.pixysos.updater"
         minSdkVersion 27
         targetSdkVersion 28
     }
