@@ -83,7 +83,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
     private RotateAnimation mRefreshAnimation;
 
     private String currentAction;
-    private TextView updateAction;
 
     private float rotationAngle = 0f;
     private ExtrasFragment extrasFragment;
@@ -115,7 +114,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         setContentView(R.layout.activity_updates);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -230,7 +228,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
     @Override
     public void onStart() {
         super.onStart();
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         Intent intent = new Intent(this, UpdaterService.class);
         startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
