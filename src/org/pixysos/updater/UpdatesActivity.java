@@ -31,6 +31,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -44,6 +46,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -149,13 +152,13 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             }
         };
 
-        TextView headerTitle = findViewById(R.id.header_title);
-        headerTitle.setText(getString(R.string.header_title_text, getString(R.string.display_name)));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ((TextView) toolbar.findViewById(R.id.titleText)).setText(getString(R.string.header_title_text, getString(R.string.display_name)));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         updateLastCheckedString();
-
-        ImageView moreOptions = findViewById(R.id.more_options);
-        moreOptions.setImageResource(R.drawable.ic_more_options);
 
         TextView updateStatus = findViewById(R.id.update_status);
         updateStatus.setText(getString(R.string.up_to_date_notification));
@@ -212,8 +215,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         checkUpdates.getDrawable().mutate().setTint(Color.WHITE);
         checkUpdates.setOnClickListener(v -> downloadUpdatesList(true));
 
-        moreOptions.setOnClickListener(v -> initializePopupMenu());
-
         findViewById(R.id.extras_layout).setOnClickListener(v -> startExpandAndCollapseAnimation());
 
         findViewById(R.id.mainScrollView).setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -254,6 +255,29 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_preferences: {
+                showPreferencesDialog();
+                return true;
+            }
+            case R.id.menu_show_changelog: {
+                Intent openUrl = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(Utils.getChangelogURL(this)));
+                startActivity(openUrl);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void startExpandAndCollapseAnimation() {
         TextView extrasInfo = findViewById(R.id.extras_info);
         extrasInfo.setText(getString(R.string.extras_info));
@@ -278,28 +302,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             rotationAngle += 180;
             rotationAngle %= 360;
         }
-    }
-
-    private void initializePopupMenu() {
-        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(this, R.style.PopupMenuStyle);
-        PopupMenu popupMenu = new PopupMenu(themeWrapper, findViewById(R.id.more_options));
-        popupMenu.getMenuInflater().inflate(R.menu.menu_toolbar, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.menu_preferences: {
-                    showPreferencesDialog();
-                    return true;
-                }
-                case R.id.menu_show_changelog: {
-                    Intent openUrl = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(Utils.getChangelogURL(UpdatesActivity.this)));
-                    startActivity(openUrl);
-                    return true;
-                }
-            }
-            return false;
-        });
-        popupMenu.show();
     }
 
     private void handleUpdateAction(boolean isRomInfoLayoutVisible) {
