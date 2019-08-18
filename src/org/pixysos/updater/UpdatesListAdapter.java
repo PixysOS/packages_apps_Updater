@@ -151,7 +151,7 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
                 viewHolder.mBuildDate));
         viewHolder.mProgressBar.setVisibility(View.VISIBLE);
         viewHolder.mProgressText.setVisibility(View.VISIBLE);
-        viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitaInDip(mActivity, 16));
+        viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitsInDip(mActivity, 16));
         ;
         viewHolder.mBuildSize.setVisibility(View.INVISIBLE);
     }
