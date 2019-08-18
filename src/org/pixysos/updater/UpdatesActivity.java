@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +39,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -416,7 +414,7 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             Log.d(TAG, "Up to date");
             findViewById(R.id.recycler_view).setVisibility(View.GONE);
             updateStatus.setText(getString(R.string.up_to_date_notification));
-            findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitaInDip(this, 16), 0, 0);
+            findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitsInDip(this, 16), 0, 0);
             isPaddingSet = true;
             findViewById(R.id.rom_info_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.updatesLayout).setOnClickListener(null);
@@ -512,7 +510,7 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             public void onFailure(final boolean cancelled) {
                 Log.e(TAG, "Could not download updates list");
                 if (!isPaddingSet)
-                    runOnUiThread(() -> findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitaInDip(UpdatesActivity.this, 16), 0, 0));
+                    runOnUiThread(() -> findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitsInDip(UpdatesActivity.this, 16), 0, 0));
 
                 if (findViewById(R.id.ic_expand).getVisibility() == View.GONE)
                    runOnUiThread(() -> findViewById(R.id.ic_expand).setVisibility(View.VISIBLE));

@@ -400,7 +400,7 @@ public class Utils {
         }
     }
 
-    public static int getUnitaInDip(Activity mActivity, int uniInDip) {
+    public static int getUnitsInDip(Activity mActivity, int uniInDip) {
         Resources r = mActivity.getResources();
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
