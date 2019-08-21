@@ -154,8 +154,10 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
                 viewHolder.mBuildDate));
         viewHolder.mProgressBar.setVisibility(View.VISIBLE);
         viewHolder.mProgressText.setVisibility(View.VISIBLE);
+
         setConstraintsForChangelogView(viewHolder.mRootView, viewHolder.mChangelogView, viewHolder.mProgressText);
         viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitsInDip(mActivity, 8));
+
         viewHolder.mBuildSize.setVisibility(View.INVISIBLE);
     }
 
@@ -632,7 +634,6 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
             mProgressBar = view.findViewById(R.id.progress_bar);
             mProgressText = view.findViewById(R.id.progress_text);
-
             mRootView = view.findViewById(R.id.update_item_layout);
             mChangelogView = view.findViewById(R.id.view_changelog);
         }

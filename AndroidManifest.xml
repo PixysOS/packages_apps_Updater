@@ -18,6 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
         <activity
             android:name=".ChangelogActivity"
@@ -26,7 +27,7 @@
             android:parentActivityName=".UpdatesActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".UpdatesActivity"
+            android:name="org.pixysos.updater.UpdatesActivity"
             android:excludeFromRecents="true"
             android:label="@string/display_name"
             android:launchMode="singleTop"
@@ -38,23 +39,31 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.android.settings.SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <service android:name=".controller.UpdaterService" />
-        <service android:name=".ExportUpdateService" />
+        <service android:name="org.pixysos.updater.controller.UpdaterService" />
+        <service android:name="org.pixysos.updater.ExportUpdateService" />
 
+<<<<<<< HEAD
         <receiver
             android:name=".UpdaterReceiver"
             android:exported="false">
+=======
+        <receiver android:name="org.pixysos.updater.UpdaterReceiver" android:exported="false">
+>>>>>>> refs/remotes/origin/pie
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+<<<<<<< HEAD
         <receiver android:name=".UpdatesCheckReceiver">
+=======
+
+        <receiver android:name="org.pixysos.updater.UpdatesCheckReceiver">
+>>>>>>> refs/remotes/origin/pie
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

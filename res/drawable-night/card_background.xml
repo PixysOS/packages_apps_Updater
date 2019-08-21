@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2019 The PixysOS Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +14,18 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:icon="@drawable/ic_forum"
-        android:key="@string/key_xda_thread"
-        android:summary="@string/xda_thread_summary"
-        android:title="@string/xda_thread" />
-    <Preference
-        android:icon="@drawable/ic_donate"
-        android:key="@string/key_donate"
-        android:summary="@string/donate_summary"
-        android:title="@string/donate" />
-</PreferenceScreen>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#525456">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/cardBackground" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <item android:id="@android:id/mask">
+        <shape>
+            <solid android:color="#525456" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</ripple>
