@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         android:maxLines="1"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/build_version"
@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         android:singleLine="true"
         app:layout_constraintStart_toStartOf="@id/build_date"
         app:layout_constraintTop_toBottomOf="@id/build_date"
@@ -87,10 +87,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         android:singleLine="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/progress_bar"
         app:layout_constraintTop_toBottomOf="@id/progress_bar"
         tools:text="162 of 300 MB (3 minutes left) • 65%"
@@ -111,4 +110,22 @@
         tools:drawableStart="@drawable/ic_pause"
         tools:drawableTint="@color/theme_accent"
         tools:text="@string/action_pause" />
+
+    <TextView
+        android:id="@+id/view_changelog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/view_changelog"
+        android:textAllCaps="false"
+        android:textColor="@color/theme_accent"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/build_size"
+        app:layout_constraintTop_toBottomOf="@id/progress_text"
+        tools:text="View changelog" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

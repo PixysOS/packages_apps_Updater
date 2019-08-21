@@ -22,7 +22,7 @@
     <color name="title_color">#E8EAED</color>
     <color name="update_background">#212121</color>
     <color name="inverted">#f5f5f5</color>
-    <color name="strokeColor">#80868B</color>
+    <color name="strokeColor">#434343</color>
     <color name="button_ripple_color">#3A485E</color>
     <color name="cardBackground">#2D2E31</color>
     <color name="ripple_color">#3f4143</color>

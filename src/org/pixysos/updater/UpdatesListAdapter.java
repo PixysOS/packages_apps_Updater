@@ -43,6 +43,8 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -88,6 +90,7 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.update_item_view, viewGroup, false);
+        view.findViewById(R.id.view_changelog).setOnClickListener(v -> mActivity.startActivity(new Intent(mActivity, ChangelogActivity.class)));
         return new ViewHolder(view);
     }
 
@@ -151,8 +154,10 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
                 viewHolder.mBuildDate));
         viewHolder.mProgressBar.setVisibility(View.VISIBLE);
         viewHolder.mProgressText.setVisibility(View.VISIBLE);
-        viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitsInDip(mActivity, 16));
-        ;
+
+        setConstraintsForChangelogView(viewHolder.mRootView, viewHolder.mChangelogView, viewHolder.mProgressText);
+        viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitsInDip(mActivity, 8));
+
         viewHolder.mBuildSize.setVisibility(View.INVISIBLE);
     }
 
@@ -182,6 +187,7 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
         viewHolder.mProgressBar.setVisibility(View.INVISIBLE);
         viewHolder.mProgressText.setVisibility(View.INVISIBLE);
+        setConstraintsForChangelogView(viewHolder.mRootView, viewHolder.mChangelogView, viewHolder.mBuildSize);
         viewHolder.mProgressText.setPadding(0, 0, 0, 0);
         viewHolder.mBuildSize.setVisibility(View.VISIBLE);
     }
@@ -342,6 +348,8 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
             case INSTALL: {
                 currentAction = "INSTALL";
                 currentActionInterface.currentAction(currentAction);
+                ((TextView) mActivity.findViewById(R.id.update_status)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
+                ((TextView) mActivity.findViewById(R.id.update_status)).setText(mActivity.getString(R.string.update_downloaded_status));
                 if (mActivity.findViewById(R.id.rom_info_layout).getVisibility() == View.VISIBLE)
                     button.setText(R.string.action_install);
                 else
@@ -576,10 +584,20 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
         int percent = Math.round(100.f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) /
                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        int required = (plugged & BatteryManager.BATTERY_PLUGGED_ANY) != 0 ?
+        int BATTERY_PLUGGED_ANY = (BatteryManager.BATTERY_PLUGGED_AC) | (BatteryManager.BATTERY_PLUGGED_USB) | (BatteryManager.BATTERY_PLUGGED_WIRELESS);
+        int required = (plugged & BATTERY_PLUGGED_ANY) != 0 ?
                 mActivity.getResources().getInteger(R.integer.battery_ok_percentage_charging) :
                 mActivity.getResources().getInteger(R.integer.battery_ok_percentage_discharging);
         return percent >= required;
+    }
+
+    private void setConstraintsForChangelogView(ConstraintLayout rootView, TextView changelogView, TextView topView) {
+        ConstraintSet set = new ConstraintSet();
+        set.clone(rootView);
+        set.connect(changelogView.getId(), ConstraintSet.TOP, topView.getId(), ConstraintSet.BOTTOM);
+        set.connect(changelogView.getId(), ConstraintSet.START, topView.getId(), ConstraintSet.START);
+        set.connect(changelogView.getId(), ConstraintSet.BOTTOM, rootView.getId(), ConstraintSet.BOTTOM);
+        set.applyTo(rootView);
     }
 
     private enum Action {
@@ -603,6 +621,9 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
         private final ProgressBar mProgressBar;
         private final TextView mProgressText;
 
+        private final ConstraintLayout mRootView;
+        private final TextView mChangelogView;
+
         ViewHolder(final View view) {
             super(view);
             mAction = view.findViewById(R.id.update_action);
@@ -613,6 +634,8 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
             mProgressBar = view.findViewById(R.id.progress_bar);
             mProgressText = view.findViewById(R.id.progress_text);
+            mRootView = view.findViewById(R.id.update_item_layout);
+            mChangelogView = view.findViewById(R.id.view_changelog);
         }
     }
 }

@@ -33,24 +33,34 @@
             </intent-filter>
 
             <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="com.android.settings.SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ChangelogActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:parentActivityName=".UpdatesActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service android:name="org.pixysos.updater.controller.UpdaterService" />
         <service android:name="org.pixysos.updater.ExportUpdateService" />
 
-        <receiver android:name="org.pixysos.updater.UpdaterReceiver" android:exported="false">
+        <receiver
+            android:name="org.pixysos.updater.UpdaterReceiver"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <receiver android:name="org.pixysos.updater.UpdatesCheckReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

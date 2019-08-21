@@ -84,6 +84,10 @@ public class Utils {
         return new File(context.getCacheDir(), "updates.json");
     }
 
+    public static File getCachedChangelogList(Context context) {
+        return new File(context.getCacheDir(), "changelog.txt");
+    }
+
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
@@ -120,6 +124,7 @@ public class Utils {
 
     public static List<UpdateInfo> parseJson(File file, boolean compatibleOnly)
             throws IOException, JSONException {
+        Log.d(TAG, file.getAbsolutePath());
         List<UpdateInfo> updates = new ArrayList<>();
 
         StringBuilder json = new StringBuilder();

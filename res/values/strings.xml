@@ -29,6 +29,13 @@
     <string name="device">Device</string>
     <string name="rom_info">Rom Information</string>
     <string name="unknown">Unknown</string>
+    <string name="error_title">Oops!</string>
+    <string name="error_summary">Something went wrong. Retry or check back soon!</string>
+    <string name="action_retry">Retry</string>
+    <string name="changelog">Changelog</string>
+    <string name="view_changelog">View changelog</string>
+    <string name="update_downloaded_status">Update downloaded</string>
+    <string name="community_extras">Community Extras</string>
     <!-- Directory where the update files will be downloaded and stored.
          WARNING: The application can and will delete any unknown file. -->
     <string name="download_path" translatable="false">/data/pixysos_updates/</string>

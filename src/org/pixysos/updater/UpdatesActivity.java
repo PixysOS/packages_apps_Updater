@@ -23,9 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -72,23 +71,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class UpdatesActivity extends UpdatesListActivity implements CurrentActionInterface {
-
     private static final String TAG = "UpdatesActivity";
     private UpdaterService mUpdaterService;
     private BroadcastReceiver mBroadcastReceiver;
-
     private UpdatesListAdapter mAdapter;
-
     private View mRefreshIconView;
     private RotateAnimation mRefreshAnimation;
-
     private String currentAction;
-
     private float rotationAngle = 0f;
     private ExtrasFragment extrasFragment;
     private boolean isPaddingSet = false;
     private final ServiceConnection mConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
@@ -115,7 +108,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_updates);
-
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         mAdapter = new UpdatesListAdapter(this, this);
         recyclerView.setAdapter(mAdapter);
@@ -125,13 +117,11 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-
         extrasFragment = new ExtrasFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.extras_fragment, extrasFragment)
                 .commit();
-
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -149,72 +139,53 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                 }
             }
         };
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ((TextView) toolbar.findViewById(R.id.titleText)).setText(getString(R.string.header_title_text, getString(R.string.display_name)));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         updateLastCheckedString();
-
         TextView updateStatus = findViewById(R.id.update_status);
         updateStatus.setText(getString(R.string.up_to_date_notification));
-
         TextView updatesText = findViewById(R.id.updates_text);
         updatesText.setText(getString(R.string.updates));
-
         TextView currentBuildtext = findViewById(R.id.currentBuildText);
         currentBuildtext.setText(getString(R.string.current_build));
-
         TextView maintainerText = findViewById(R.id.maintainerText);
         maintainerText.setText(getString(R.string.maintainer));
-
         TextView lastCheckedText = findViewById(R.id.lastCheckedText);
         lastCheckedText.setText(getString(R.string.last_checked));
-
         TextView headerBuildDate = findViewById(R.id.header_build_date);
         headerBuildDate.setText(StringGenerator.getDateLocalizedUTC(this,
                 DateFormat.LONG, BuildInfoUtils.getBuildDateTimestamp()));
-
         TextView maintainerName = findViewById(R.id.maintainer_name);
         String maintainer = getString(R.string.maintainer_name, BuildInfoUtils.getMaintainer());
         if (!maintainer.isEmpty())
             maintainerName.setText(maintainer);
         else
             maintainerName.setText(getString(R.string.unknown));
-
-        TextView romInfoText = findViewById(R.id.romInfoText);
-        romInfoText.setText(getString(R.string.rom_info));
-
         TextView deviceText = findViewById(R.id.deviceText);
         String device = getString(R.string.device);
         deviceText.setText(device);
-
         TextView headerDeviceName = findViewById(R.id.header_device_name);
         String deviceName = BuildInfoUtils.getDevice();
         if (!deviceName.isEmpty())
             headerDeviceName.setText(BuildInfoUtils.getDevice());
         else
             headerDeviceName.setText(getString(R.string.unknown));
-
         TextView extrasText = findViewById(R.id.extrasText);
         extrasText.setText(getString(R.string.extras));
-
-        TextView lookingForMore = findViewById(R.id.lookingForMoreText);
-        lookingForMore.setText(getString(R.string.looking_for_more));
-
+        TextView communityExtras = findViewById(R.id.community_extras);
+        communityExtras.setText(getString(R.string.community_extras));
         mRefreshAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mRefreshAnimation.setInterpolator(new LinearInterpolator());
         mRefreshAnimation.setDuration(1000);
-
         FloatingActionButton checkUpdates = findViewById(R.id.check_updates);
-        checkUpdates.getDrawable().mutate().setTint(Color.WHITE);
+        if (!isDarkModeEnabled())
+            checkUpdates.getDrawable().mutate().setTint(Color.WHITE);
         checkUpdates.setOnClickListener(v -> downloadUpdatesList(true));
-
         findViewById(R.id.extras_layout).setOnClickListener(v -> startExpandAndCollapseAnimation());
-
         findViewById(R.id.mainScrollView).setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollY > oldScrollY)
                 checkUpdates.hide();
@@ -229,7 +200,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         Intent intent = new Intent(this, UpdaterService.class);
         startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UpdaterController.ACTION_UPDATE_STATUS);
         intentFilter.addAction(UpdaterController.ACTION_DOWNLOAD_PROGRESS);
@@ -267,9 +237,7 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                 return true;
             }
             case R.id.menu_show_changelog: {
-                Intent openUrl = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(Utils.getChangelogURL(this)));
-                startActivity(openUrl);
+                startActivity(new Intent(this, ChangelogActivity.class));
                 return true;
             }
         }
@@ -279,10 +247,8 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
     private void startExpandAndCollapseAnimation() {
         TextView extrasInfo = findViewById(R.id.extras_info);
         extrasInfo.setText(getString(R.string.extras_info));
-
         FrameLayout extrasLayout = findViewById(R.id.extras_fragment);
         extrasLayout.setVisibility((extrasLayout.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE);
-
         View emptyView = findViewById(R.id.emptyView);
         if (emptyView.getVisibility() == View.VISIBLE)
             extrasInfo.setVisibility(View.GONE);
@@ -392,7 +358,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         extrasFragment.updatePreferences(Utils.parseJson(jsonFile, false));
         UpdaterController controller = mUpdaterService.getUpdaterController();
         boolean newUpdates = false;
-
         List<UpdateInfo> updates = Utils.parseJson(jsonFile, true);
         List<String> updatesOnline = new ArrayList<>();
         for (UpdateInfo update : updates) {
@@ -400,21 +365,20 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             updatesOnline.add(update.getDownloadId());
         }
         controller.setUpdatesAvailableOnline(updatesOnline, true);
-
         if (manualRefresh) {
             showSnackbar(
                     newUpdates ? R.string.snack_updates_found : R.string.snack_no_updates_found,
                     Snackbar.LENGTH_SHORT);
         }
-
         List<String> updateIds = new ArrayList<>();
         List<UpdateInfo> sortedUpdates = controller.getUpdates();
         TextView updateStatus = findViewById(R.id.update_status);
         if (sortedUpdates.isEmpty()) {
             Log.d(TAG, "Up to date");
             findViewById(R.id.recycler_view).setVisibility(View.GONE);
+            findViewById(R.id.divider).setVisibility(View.GONE);
             updateStatus.setText(getString(R.string.up_to_date_notification));
-            findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitsInDip(this, 16), 0, 0);
+            findViewById(R.id.divider).setPadding(0, Utils.getUnitsInDip(this, 16), 0, 0);
             isPaddingSet = true;
             findViewById(R.id.rom_info_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.updatesLayout).setOnClickListener(null);
@@ -423,37 +387,16 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             romInfoView.setVisibility(View.GONE);
             findViewById(R.id.updatesLayout).setOnClickListener(v -> {
                 romInfoView.setVisibility((romInfoView.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-                alphaAnimation.setDuration(100);
-                alphaAnimation.setRepeatCount(1);
-                alphaAnimation.setRepeatMode(Animation.REVERSE);
-
-                alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                        handleUpdateAction(romInfoView.getVisibility() == View.VISIBLE);
-                    }
-                });
-                findViewById(R.id.update_action).startAnimation(alphaAnimation);
+                handleUpdateAction(romInfoView.getVisibility() == View.VISIBLE);
             });
-
             updateStatus.setText(getString(R.string.update_found_notification));
             updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_outline_info, 0, 0, 0);
             findViewById(R.id.recycler_view).setVisibility(View.VISIBLE);
-            findViewById(R.id.lastCheckedText).setPadding(0, 0, 0, 0);
+            findViewById(R.id.divider).setVisibility(View.VISIBLE);
+            findViewById(R.id.divider).setPadding(0, 0, 0, 0);
             isPaddingSet = false;
-
             if (findViewById(R.id.update_action) != null)
                 handleUpdateAction(romInfoView.getVisibility() == View.VISIBLE);
-
             sortedUpdates.sort((u1, u2) -> Long.compare(u2.getTimestamp(), u1.getTimestamp()));
             for (UpdateInfo update : sortedUpdates) {
                 updateIds.add(update.getDownloadId());
@@ -494,7 +437,11 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Could not read json", e);
             TextView updateStatus = findViewById(R.id.update_status);
-            updateStatus.setText(getString(R.string.up_to_date_notification));
+            if (findViewById(R.id.recycler_view).getVisibility() == View.GONE) {
+                findViewById(R.id.divider).setVisibility(View.GONE);
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
+                updateStatus.setText(getString(R.string.up_to_date_notification));
+            }
             showSnackbar(R.string.snack_updates_check_failed, Snackbar.LENGTH_LONG);
         }
     }
@@ -503,22 +450,28 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         final File jsonFile = Utils.getCachedUpdateList(this);
         final File jsonFileTmp = new File(jsonFile.getAbsolutePath() + UUID.randomUUID());
         String url = Utils.getServerURL(this);
+        final File changelogFile = Utils.getCachedChangelogList(this);
+        String changelogUrl = Utils.getChangelogURL(this);
         Log.d(TAG, "Checking " + url);
-
+        Log.d(TAG, "Checking changelog " + changelogUrl);
         DownloadClient.DownloadCallback callback = new DownloadClient.DownloadCallback() {
             @Override
             public void onFailure(final boolean cancelled) {
                 Log.e(TAG, "Could not download updates list");
                 if (!isPaddingSet)
-                    runOnUiThread(() -> findViewById(R.id.lastCheckedText).setPadding(0, Utils.getUnitsInDip(UpdatesActivity.this, 16), 0, 0));
-
+                    runOnUiThread(() -> findViewById(R.id.divider).setPadding(0, Utils.getUnitsInDip(UpdatesActivity.this, 16), 0, 0));
                 if (findViewById(R.id.ic_expand).getVisibility() == View.GONE)
-                   runOnUiThread(() -> findViewById(R.id.ic_expand).setVisibility(View.VISIBLE));
-
+                    runOnUiThread(() -> findViewById(R.id.ic_expand).setVisibility(View.VISIBLE));
+                if (findViewById(R.id.recycler_view).getVisibility() == View.GONE)
+                    runOnUiThread(() -> findViewById(R.id.divider).setVisibility(View.GONE));
                 runOnUiThread(() -> {
                     if (!cancelled) {
                         TextView updateStatus = findViewById(R.id.update_status);
-                        updateStatus.setText(getString(R.string.up_to_date_notification));
+                        if (findViewById(R.id.recycler_view).getVisibility() == View.GONE) {
+                            findViewById(R.id.divider).setVisibility(View.GONE);
+                            updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
+                            updateStatus.setText(getString(R.string.up_to_date_notification));
+                        }
                         showSnackbar(R.string.snack_updates_check_failed, Snackbar.LENGTH_LONG);
                     }
                     refreshAnimationStop();
@@ -539,24 +492,47 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                 });
             }
         };
+        DownloadClient.DownloadCallback changelogCallback = new DownloadClient.DownloadCallback() {
+            @Override
+            public void onResponse(int statusCode, String url, DownloadClient.Headers headers) {
+            }
 
+            @Override
+            public void onSuccess(File destination) {
+                Log.d(TAG, "Changelog downloaded");
+            }
+
+            @Override
+            public void onFailure(boolean cancelled) {
+            }
+        };
         final DownloadClient downloadClient;
+        final DownloadClient changelogDownloadClient;
         try {
             downloadClient = new DownloadClient.Builder()
                     .setUrl(url)
                     .setDestination(jsonFileTmp)
                     .setDownloadCallback(callback)
                     .build();
+            changelogDownloadClient = new DownloadClient.Builder()
+                    .setUrl(changelogUrl)
+                    .setDestination(new File(changelogFile.getAbsolutePath()))
+                    .setDownloadCallback(changelogCallback)
+                    .build();
         } catch (IOException exception) {
             Log.e(TAG, "Could not build download client");
             TextView updateStatus = findViewById(R.id.update_status);
-            updateStatus.setText(getString(R.string.up_to_date_notification));
+            if (findViewById(R.id.recycler_view).getVisibility() == View.GONE) {
+                findViewById(R.id.divider).setVisibility(View.GONE);
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
+                updateStatus.setText(getString(R.string.up_to_date_notification));
+            }
             showSnackbar(R.string.snack_updates_check_failed, Snackbar.LENGTH_LONG);
             return;
         }
-
         refreshAnimationStart();
         downloadClient.start();
+        changelogDownloadClient.start();
     }
 
     private void updateLastCheckedString() {
@@ -580,6 +556,8 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                 showSnackbar(R.string.snack_download_verification_failed, Snackbar.LENGTH_LONG);
                 break;
             case VERIFIED:
+                ((TextView) findViewById(R.id.update_status)).setText(getString(R.string.update_downloaded_status));
+                ((TextView) findViewById(R.id.update_status)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
                 showSnackbar(R.string.snack_download_verified, Snackbar.LENGTH_LONG);
                 break;
         }
@@ -615,17 +593,14 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         Switch autoDelete = view.findViewById(R.id.preferences_auto_delete_updates);
         Switch dataWarning = view.findViewById(R.id.preferences_mobile_data_warning);
         Switch abPerfMode = view.findViewById(R.id.preferences_ab_perf_mode);
-
         if (!Utils.isABDevice()) {
             abPerfMode.setVisibility(View.GONE);
         }
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         autoCheckInterval.setSelection(Utils.getUpdateCheckSetting(this));
         autoDelete.setChecked(prefs.getBoolean(Constants.PREF_AUTO_DELETE_UPDATES, false));
         dataWarning.setChecked(prefs.getBoolean(Constants.PREF_MOBILE_DATA_WARNING, true));
         abPerfMode.setChecked(prefs.getBoolean(Constants.PREF_AB_PERF_MODE, false));
-
         new AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(R.string.menu_preferences)
                 .setView(view)
@@ -640,17 +615,28 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                             .putBoolean(Constants.PREF_AB_PERF_MODE,
                                     abPerfMode.isChecked())
                             .apply();
-
                     if (Utils.isUpdateCheckEnabled(this)) {
                         UpdatesCheckReceiver.scheduleRepeatingUpdatesCheck(this);
                     } else {
                         UpdatesCheckReceiver.cancelRepeatingUpdatesCheck(this);
                         UpdatesCheckReceiver.cancelUpdatesCheck(this);
                     }
-
                     boolean enableABPerfMode = abPerfMode.isChecked();
                     mUpdaterService.getUpdaterController().setPerformanceMode(enableABPerfMode);
                 })
                 .show();
+    }
+
+    private boolean isDarkModeEnabled() {
+        int isDarkMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (isDarkMode) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+                return false;
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                return false;
+        }
+        return false;
     }
 }
