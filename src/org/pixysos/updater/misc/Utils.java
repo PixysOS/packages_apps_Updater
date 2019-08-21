@@ -47,13 +47,19 @@ import org.pixysos.updater.model.UpdateInfo;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -82,6 +88,10 @@ public class Utils {
 
     public static File getCachedUpdateList(Context context) {
         return new File(context.getCacheDir(), "updates.json");
+    }
+
+    public static File getCachedChangelogList(Context context) {
+        return new File(context.getCacheDir(), "changelog.txt");
     }
 
     // This should really return an UpdateBaseInfo object, but currently this only
@@ -120,6 +130,7 @@ public class Utils {
 
     public static List<UpdateInfo> parseJson(File file, boolean compatibleOnly)
             throws IOException, JSONException {
+        Log.d(TAG, file.getAbsolutePath());
         List<UpdateInfo> updates = new ArrayList<>();
 
         StringBuilder json = new StringBuilder();
@@ -400,7 +411,7 @@ public class Utils {
         }
     }
 
-    public static int getUnitaInDip(Activity mActivity, int uniInDip) {
+    public static int getUnitsInDip(Activity mActivity, int uniInDip) {
         Resources r = mActivity.getResources();
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,

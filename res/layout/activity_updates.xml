@@ -21,64 +21,65 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/update_background"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_collapseMode="pin">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableStart="@drawable/ic_pixys_logo"
+                android:drawablePadding="16dp"
+                android:drawableTint="@color/title_color"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/title_color" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/root_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:animateLayoutChanges="true"
             android:paddingBottom="16dp">
-
-            <ImageView
-                android:id="@+id/more_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp"
-                android:tint="@color/title_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_more_options" />
-
-            <TextView
-                android:id="@+id/header_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/ic_pixys_logo"
-                android:drawablePadding="16dp"
-                android:drawableTint="@color/title_color"
-                android:fontFamily="@font/google_sans_regular"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textColor="@color/title_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="PixysOS Updater" />
 
             <TextView
                 android:id="@+id/updates_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.08"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textColor="@color/theme_accent"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_title"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Updates" />
 
             <LinearLayout
@@ -91,7 +92,7 @@
                 android:animateLayoutChanges="true"
                 android:background="@drawable/card_background"
                 android:clickable="true"
-                android:elevation="4dp"
+                android:elevation="1dp"
                 android:focusable="true"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="@id/updates_text"
@@ -109,14 +110,16 @@
                     android:drawableTint="@color/theme_accent"
                     android:fontFamily="@font/google_sans_regular"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:text="You're up to date" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
                 <include
                     layout="@layout/layout_rom_info"
@@ -148,6 +151,7 @@
                 android:animateLayoutChanges="true"
                 android:background="@drawable/card_background"
                 android:clickable="true"
+                android:elevation="1dp"
                 android:focusable="true"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
@@ -156,15 +160,16 @@
                 app:layout_constraintTop_toBottomOf="@id/extrasText">
 
                 <TextView
-                    android:id="@+id/lookingForMoreText"
+                    android:id="@+id/community_extras"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:drawableTint="?android:attr/textColorPrimary"
                     android:fontFamily="@font/google_sans_regular"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="18dp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Looking for more?" />
@@ -185,11 +190,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
-                    android:fontFamily="@font/google_sans_regular"
+                    android:fontFamily="sans-serif"
                     android:text=""
                     app:layout_constraintEnd_toStartOf="@id/ic_expand"
-                    app:layout_constraintStart_toStartOf="@id/lookingForMoreText"
-                    app:layout_constraintTop_toBottomOf="@id/lookingForMoreText"
+                    app:layout_constraintStart_toStartOf="@id/community_extras"
+                    app:layout_constraintTop_toBottomOf="@id/community_extras"
                     tools:text="@string/extras_info" />
 
                 <include
@@ -218,5 +223,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
         android:src="@drawable/ic_check_updates"
-        app:backgroundTint="#1A73E8" />
+        app:backgroundTint="@color/theme_accent" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
