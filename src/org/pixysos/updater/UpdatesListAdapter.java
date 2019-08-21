@@ -305,7 +305,7 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
                 currentActionInterface.currentAction(currentAction);
                 if (mActivity.findViewById(R.id.rom_info_layout).getVisibility() == View.VISIBLE) {
                     button.setText(R.string.action_download);
-                    button.setBackgroundResource(R.drawable.button_background);
+                    button.setBackgroundResource(R.drawable.button_background_outlined);
                 } else {
                     button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_download, 0, 0, 0);
                     button.setBackgroundResource(0);

@@ -275,35 +275,35 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             switch (currentAction) {
                 case "PAUSE":
                     updateAction.setText(getString(R.string.action_pause));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "RESUME":
                     updateAction.setText(getString(R.string.action_resume));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "DOWNLOAD":
                     updateAction.setText(getString(R.string.action_download));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "CANCEL":
                     updateAction.setText(getString(R.string.action_cancel));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "DELETE":
                     updateAction.setText(getString(R.string.action_delete));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "INSTALL":
                     updateAction.setText(getString(R.string.action_install));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "REBOOT":
                     updateAction.setText(getString(R.string.reboot));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
                 case "INFO":
                     updateAction.setText(getString(R.string.action_info));
-                    updateAction.setBackgroundResource(R.drawable.button_background);
+                    updateAction.setBackgroundResource(R.drawable.button_background_outlined);
                     break;
             }
         } else {
