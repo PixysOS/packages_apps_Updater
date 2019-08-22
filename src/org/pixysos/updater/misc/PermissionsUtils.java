@@ -17,9 +17,9 @@
 package org.pixysos.updater.misc;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PermissionsUtils {
      * @param requestCode @see Activity#requestPermissions(String[] , int)
      * @return true if the permission is granted, false otherwise
      */
-    private static boolean checkAndRequestPermissions(final Activity activity,
+    private static boolean checkAndRequestPermissions(final AppCompatActivity activity,
                                                       final String[] permissions, final int requestCode) {
         List<String> permissionsList = new ArrayList<>();
         for (String permission : permissions) {
@@ -60,9 +60,9 @@ public class PermissionsUtils {
     /**
      * Check and request the write external storage permission
      *
-     * @see #checkAndRequestPermissions(Activity, String[], int)
+     * @see #checkAndRequestPermissions(AppCompatActivity, String[], int)
      */
-    public static boolean checkAndRequestStoragePermission(Activity activity, int requestCode) {
+    public static boolean checkAndRequestStoragePermission(AppCompatActivity activity, int requestCode) {
         return checkAndRequestPermissions(activity,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 requestCode);

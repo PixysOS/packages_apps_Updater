@@ -27,4 +27,5 @@
     <color name="cardBackground">#2D2E31</color>
     <color name="ripple_color">#3f4143</color>
     <color name="dialog_background">#212121</color>
+    <color name="snackbar_background">#FFFFFF</color>
 </resources>

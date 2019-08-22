@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
@@ -24,16 +24,15 @@
     android:animateLayoutChanges="true"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/update_background"
-        android:fitsSystemWindows="true"
         app:elevation="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -51,8 +50,8 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/title_color" />
 
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
     <ScrollView
         android:id="@+id/mainScrollView"
@@ -61,12 +60,13 @@
         android:animateLayoutChanges="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/root_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:animateLayoutChanges="true"
+            android:orientation="vertical"
             android:paddingBottom="16dp">
 
             <TextView
@@ -79,8 +79,6 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textColor="@color/theme_accent"
                 android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Updates" />
 
             <LinearLayout
@@ -95,9 +93,7 @@
                 android:clickable="true"
                 android:elevation="1dp"
                 android:focusable="true"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="@id/updates_text"
-                app:layout_constraintTop_toBottomOf="@id/updates_text">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/update_status"
@@ -116,7 +112,7 @@
                     android:textStyle="bold"
                     tools:text="You're up to date" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -139,12 +135,10 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textColor="@color/theme_accent"
                 android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/updatesLayout"
                 tools:text="@string/extras" />
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:id="@+id/extras_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,15 +149,14 @@
                 android:elevation="1dp"
                 android:focusable="true"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/extrasText"
-                app:layout_constraintTop_toBottomOf="@id/extrasText">
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:id="@+id/community_extras"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:drawableTint="?android:attr/textColorPrimary"
@@ -171,53 +164,49 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Looking for more?" />
 
                 <ImageView
                     android:id="@+id/ic_expand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_expand"
                     android:tint="?android:attr/textColorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:srcCompat="@drawable/ic_expand" />
 
                 <TextView
                     android:id="@+id/extras_info"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/community_extras"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="sans-serif"
                     android:text=""
-                    app:layout_constraintEnd_toStartOf="@id/ic_expand"
-                    app:layout_constraintStart_toStartOf="@id/community_extras"
-                    app:layout_constraintTop_toBottomOf="@id/community_extras"
                     tools:text="@string/extras_info" />
 
                 <include
                     layout="@layout/empty_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/extras_info"
-                    app:layout_constraintTop_toBottomOf="@id/extras_info" />
+                    android:layout_below="@id/extras_info" />
 
                 <FrameLayout
                     android:id="@+id/extras_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="@id/extras_info"
-                    app:layout_constraintTop_toBottomOf="@id/extras_info" />
+                    android:layout_below="@id/extras_info"
+                    android:layout_marginTop="16dp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/check_updates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -225,4 +214,4 @@
         android:layout_margin="24dp"
         android:src="@drawable/ic_check_updates"
         app:backgroundTint="@color/theme_accent" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>

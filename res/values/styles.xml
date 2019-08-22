@@ -22,11 +22,11 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorAccent">@color/theme_accent</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:fontFamily">@font/google_sans_regular</item>
+        <item name="fontFamily">@font/google_sans_regular</item>
         <item name="android:windowLightStatusBar">@bool/theme_is_light</item>
         <item name="android:windowLightNavigationBar">@bool/theme_is_light</item>
         <item name="android:windowBackground">@color/update_background</item>
-        <item name="android:iconTint">@color/theme_accent</item>
+        <item name="iconTint">@color/theme_accent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -38,7 +38,7 @@
     </style>
 
     <style name="AppTheme.PopupMenuOverlapAnchor">
-        <item name="android:overlapAnchor">true</item>
+        <item name="overlapAnchor">true</item>
         <item name="android:dropDownVerticalOffset">8dp</item>
         <item name="android:dropDownHorizontalOffset">-16dp</item>
     </style>
@@ -50,7 +50,7 @@
     </style>
 
     <style name="Alert.Button.Positive" parent="Widget.AppCompat.Button">
-        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/update_background</item>
         <item name="android:textStyle">bold</item>
         <item name="android:minHeight">36dp</item>
@@ -58,7 +58,7 @@
     </style>
 
     <style name="Alert.Button.Negative" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/theme_accent</item>
         <item name="android:textStyle">bold</item>
         <item name="android:minHeight">36dp</item>

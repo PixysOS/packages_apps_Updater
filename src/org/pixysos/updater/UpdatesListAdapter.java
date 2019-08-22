@@ -24,6 +24,14 @@ import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.format.Formatter;
 import android.text.method.LinkMovementMethod;
@@ -36,19 +44,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import org.pixysos.updater.controller.UpdaterController;
 import org.pixysos.updater.controller.UpdaterService;
@@ -155,8 +152,8 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
         viewHolder.mProgressBar.setVisibility(View.VISIBLE);
         viewHolder.mProgressText.setVisibility(View.VISIBLE);
 
-        setConstraintsForChangelogView(viewHolder.mRootView, viewHolder.mChangelogView, viewHolder.mProgressText);
-        viewHolder.mProgressText.setPadding(0, 0, 0, Utils.getUnitsInDip(mActivity, 8));
+        setConstraintsForChangelogView(viewHolder.mChangelogView, viewHolder.mProgressText);
+        viewHolder.mProgressText.setPadding(0, 0, 0, 0);
 
         viewHolder.mBuildSize.setVisibility(View.INVISIBLE);
     }
@@ -187,7 +184,7 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
         viewHolder.mProgressBar.setVisibility(View.INVISIBLE);
         viewHolder.mProgressText.setVisibility(View.INVISIBLE);
-        setConstraintsForChangelogView(viewHolder.mRootView, viewHolder.mChangelogView, viewHolder.mBuildSize);
+        setConstraintsForChangelogView(viewHolder.mChangelogView, viewHolder.mBuildSize);
         viewHolder.mProgressText.setPadding(0, 0, 0, 0);
         viewHolder.mBuildSize.setVisibility(View.VISIBLE);
     }
@@ -591,13 +588,11 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
         return percent >= required;
     }
 
-    private void setConstraintsForChangelogView(ConstraintLayout rootView, TextView changelogView, TextView topView) {
-        ConstraintSet set = new ConstraintSet();
-        set.clone(rootView);
-        set.connect(changelogView.getId(), ConstraintSet.TOP, topView.getId(), ConstraintSet.BOTTOM);
-        set.connect(changelogView.getId(), ConstraintSet.START, topView.getId(), ConstraintSet.START);
-        set.connect(changelogView.getId(), ConstraintSet.BOTTOM, rootView.getId(), ConstraintSet.BOTTOM);
-        set.applyTo(rootView);
+    private void setConstraintsForChangelogView(TextView changelogView, TextView topView) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, topView.getId());
+        params.setMargins(0, Utils.getUnitsInDip(mActivity, 8), 0, 0);
+        changelogView.setLayoutParams(params);
     }
 
     private enum Action {
@@ -620,8 +615,6 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
         private final ProgressBar mProgressBar;
         private final TextView mProgressText;
-
-        private final ConstraintLayout mRootView;
         private final TextView mChangelogView;
 
         ViewHolder(final View view) {
@@ -634,7 +627,6 @@ public class UpdatesListAdapter extends RecyclerView.Adapter<UpdatesListAdapter.
 
             mProgressBar = view.findViewById(R.id.progress_bar);
             mProgressText = view.findViewById(R.id.progress_text);
-            mRootView = view.findViewById(R.id.update_item_layout);
             mChangelogView = view.findViewById(R.id.view_changelog);
         }
     }

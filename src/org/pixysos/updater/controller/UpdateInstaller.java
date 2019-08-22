@@ -20,9 +20,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-
-import androidx.preference.PreferenceManager;
 
 import org.pixysos.updater.misc.Constants;
 import org.pixysos.updater.misc.FileUtils;

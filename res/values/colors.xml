@@ -28,4 +28,5 @@
     <color name="ic_background">#333333</color>
     <color name="ripple_color">#e0e0e0</color>
     <color name="dialog_background">#f5f5f5</color>
+    <color name="snackbar_background">#121212</color>
 </resources>

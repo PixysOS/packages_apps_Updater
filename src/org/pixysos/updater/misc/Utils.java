@@ -16,7 +16,6 @@
  */
 package org.pixysos.updater.misc;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -31,6 +30,7 @@ import android.os.Environment;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
@@ -405,7 +405,7 @@ public class Utils {
         }
     }
 
-    public static int getUnitsInDip(Activity mActivity, int uniInDip) {
+    public static int getUnitsInDip(AppCompatActivity mActivity, int uniInDip) {
         Resources r = mActivity.getResources();
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,

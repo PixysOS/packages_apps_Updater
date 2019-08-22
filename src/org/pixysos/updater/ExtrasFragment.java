@@ -20,14 +20,12 @@ package org.pixysos.updater;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import org.pixysos.updater.model.UpdateInfo;
 
