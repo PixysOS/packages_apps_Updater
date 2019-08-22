@@ -79,6 +79,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textColor="@color/theme_accent"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 tools:text="Updates" />
 
             <LinearLayout
@@ -135,6 +136,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textColor="@color/theme_accent"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 tools:text="@string/extras" />
 
 
