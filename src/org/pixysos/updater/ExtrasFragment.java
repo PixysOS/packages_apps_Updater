@@ -25,6 +25,7 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.pixysos.updater.model.UpdateInfo;
@@ -69,6 +70,7 @@ public class ExtrasFragment extends PreferenceFragmentCompat implements Preferen
             if (updateInfo.get(0).getXdaThreadUrl() != null && !updateInfo.get(0).getXdaThreadUrl().isEmpty()) {
                 getActivity().findViewById(R.id.emptyView).setVisibility(View.GONE);
                 extrasInfo.setText(getActivity().getString(R.string.extras_info));
+                getActivity().findViewById(R.id.ic_expand).clearAnimation();
                 getActivity().findViewById(R.id.extras_fragment).setVisibility(View.GONE);
                 extrasInfo.setVisibility(View.VISIBLE);
                 mXdaThreadUrl = updateInfo.get(0).getXdaThreadUrl();
@@ -81,10 +83,10 @@ public class ExtrasFragment extends PreferenceFragmentCompat implements Preferen
                 extrasInfo.setText(getActivity().getString(R.string.extras_info));
 
                 if (getActivity().findViewById(R.id.extras_fragment).getVisibility() == View.VISIBLE)
-                getActivity().findViewById(R.id.extras_fragment).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.extras_fragment).setVisibility(View.GONE);
 
                 if (extrasInfo.getVisibility() == View.GONE)
-                extrasInfo.setVisibility(View.VISIBLE);
+                    extrasInfo.setVisibility(View.VISIBLE);
 
                 mDonationUrl = updateInfo.get(0).getDonationUrl();
                 getPreferenceScreen().addPreference(donatePreference);

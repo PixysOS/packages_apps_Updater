@@ -248,8 +248,11 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         FrameLayout extrasLayout = findViewById(R.id.extras_fragment);
         extrasLayout.setVisibility((extrasLayout.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE);
         View emptyView = findViewById(R.id.emptyView);
-        if (emptyView.getVisibility() == View.VISIBLE)
+        if (emptyView.getVisibility() == View.VISIBLE) {
             extrasInfo.setVisibility(View.GONE);
+            rotationAngle = 0;
+            return;
+        }
         else
             extrasInfo.setVisibility((extrasInfo.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE);
         if (findViewById(R.id.ic_expand).getVisibility() == View.VISIBLE) {
