@@ -25,8 +25,8 @@
         <ImageView
             android:layout_width="72dp"
             android:layout_height="72dp"
-            app:srcCompat="@drawable/ic_cloud_unavailable"
-            android:tint="?android:attr/textColorSecondary" />
+            android:tint="?android:attr/textColorSecondary"
+            app:srcCompat="@drawable/ic_cloud_unavailable" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:text="@string/error_summary" />
 

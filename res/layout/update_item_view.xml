@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/roboto"
             android:maxLines="1"
             android:textSize="14sp"
             tools:text="29 February 2018" />
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/progress_bar"
                 android:ellipsize="marquee"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/roboto"
                 android:singleLine="true"
                 android:visibility="invisible"
                 tools:text="162 of 300 MB (3 minutes left) • 65%"
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/roboto"
                 android:singleLine="true"
                 tools:text="300 MB"
                 tools:visibility="invisible" />
