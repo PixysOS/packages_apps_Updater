@@ -25,8 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.os.SystemProperties;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.preference.PreferenceManager;
+import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import org.pixysos.updater.misc.BuildInfoUtils;
 import org.pixysos.updater.misc.Constants;
