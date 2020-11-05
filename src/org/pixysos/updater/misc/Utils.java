@@ -91,16 +91,30 @@ public class Utils {
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
+        JSONArray maintainerList = object.getJSONArray("maintainers");
+        StringBuilder maintainers = new StringBuilder();
         Update update = new Update();
-        update.setTimestamp(object.getLong("datetime"));
+        update.setTimestamp(object.getLong("timestamp"));
         update.setName(object.getString("filename"));
-        update.setDownloadId(object.getString("id"));
-        update.setType(object.getString("romtype"));
-        update.setFileSize(object.getLong("size"));
+        update.setDownloadId(object.getString("filehash"));
+        update.setType("official");
+        for (int i=0;i<maintainerList.length();i++) {
+            if (i == maintainerList.length() - 2)
+                maintainers.append(maintainerList.getJSONObject(i).getString("name")).append(" and ");
+            else if (i == maintainerList.length() - 1)
+                maintainers.append(maintainerList.getJSONObject(i).getString("name"));
+            else
+                maintainers.append(maintainerList.getJSONObject(i).getString("name")).append(", ");
+        }
+        if (maintainers.length() > 0)
+            update.setMaintainer(maintainers.toString());
+        else
+            update.setMaintainer("Unknown");
+        update.setFileSize(object.getLong("filesize"));
         update.setDownloadUrl(object.getString("url"));
         update.setVersion(object.getString("version"));
-        update.setXdaThreadUrl(object.getString("xda_thread_url"));
-        update.setDonationUrl(object.getString("donation_url"));
+        update.setXdaThreadUrl(object.getString("xda_thread"));
+        update.setDonationUrl(object.getString("donate_url"));
         return update;
     }
 
@@ -126,7 +140,6 @@ public class Utils {
             throws IOException, JSONException {
         Log.d(TAG, file.getAbsolutePath());
         List<UpdateInfo> updates = new ArrayList<>();
-
         StringBuilder json = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             for (String line; (line = br.readLine()) != null; ) {
@@ -134,48 +147,33 @@ public class Utils {
             }
         }
         JSONObject obj = new JSONObject(json.toString());
-        JSONArray updatesList = obj.getJSONArray("response");
-        for (int i = 0; i < updatesList.length(); i++) {
-            if (updatesList.isNull(i)) {
-                continue;
+        try {
+            UpdateInfo update = parseJsonUpdate(obj);
+            if (!compatibleOnly || isCompatible(update)) {
+                updates.add(update);
+            } else {
+                Log.d(TAG, "Ignoring incompatible update " + update.getName());
             }
-            try {
-                UpdateInfo update = parseJsonUpdate(updatesList.getJSONObject(i));
-                if (!compatibleOnly || isCompatible(update)) {
-                    updates.add(update);
-                } else {
-                    Log.d(TAG, "Ignoring incompatible update " + update.getName());
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "Could not parse update object, index=" + i, e);
-            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Could not parse update object", e);
         }
-
         return updates;
     }
 
     public static String getServerURL(Context context) {
-        String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
-                SystemProperties.get(Constants.PROP_DEVICE));
-        String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
+        String device = SystemProperties.get(Constants.PROP_DEVICE);
+        String type = SystemProperties.get(Constants.PROP_BUILD_VERSION_TYPE).toLowerCase(Locale.ROOT);
 
-        String serverUrl = SystemProperties.get(Constants.PROP_UPDATER_URI);
-        if (serverUrl.trim().isEmpty()) {
-            serverUrl = context.getString(R.string.updater_server_url);
-        }
+        String serverUrl = context.getString(R.string.updater_server_url);
 
         return serverUrl.replace("{device}", device)
                 .replace("{type}", type);
     }
 
     public static String getChangelogURL(Context context) {
-        String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
-                SystemProperties.get(Constants.PROP_DEVICE));
+        String device = SystemProperties.get(Constants.PROP_DEVICE);
 
-        String changelogUrl = SystemProperties.get(Constants.PROP_CHANGELOG_URL);
-        if (changelogUrl.trim().isEmpty()) {
-            changelogUrl = context.getString(R.string.menu_changelog_url);
-        }
+        String changelogUrl = context.getString(R.string.menu_changelog_url);
 
         return changelogUrl.replace("{device}", device);
     }

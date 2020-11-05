@@ -157,11 +157,17 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         headerBuildDate.setText(StringGenerator.getDateLocalizedUTC(this,
                 DateFormat.LONG, BuildInfoUtils.getBuildDateTimestamp()));
         TextView maintainerName = findViewById(R.id.maintainer_name);
-        String maintainer = getString(R.string.maintainer_name, BuildInfoUtils.getMaintainer());
-        if (!maintainer.isEmpty())
-            maintainerName.setText(maintainer);
-        else
-            maintainerName.setText(getString(R.string.unknown));
+        File jsonFile = Utils.getCachedUpdateList(this);
+        try {
+            List<UpdateInfo> infos = Utils.parseJson(jsonFile, true);
+            maintainerName.setText(infos.get(0).getMaintainer());
+        } catch (Exception e) {
+            String maintainer = getString(R.string.maintainer_name, BuildInfoUtils.getMaintainer());
+            if (!maintainer.isEmpty())
+                maintainerName.setText(maintainer);
+            else
+                maintainerName.setText(getString(R.string.unknown));
+        }
         TextView deviceText = findViewById(R.id.deviceText);
         String device = getString(R.string.device);
         deviceText.setText(device);
@@ -374,6 +380,9 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         List<String> updateIds = new ArrayList<>();
         List<UpdateInfo> sortedUpdates = controller.getUpdates();
         TextView updateStatus = findViewById(R.id.update_status);
+        TextView maintainerName = findViewById(R.id.maintainer_name);
+        if (updates.size() > 0)
+            maintainerName.setText(updates.get(0).getMaintainer());
         if (sortedUpdates.isEmpty()) {
             Log.d(TAG, "Up to date");
             findViewById(R.id.recycler_view).setVisibility(View.GONE);
@@ -438,9 +447,11 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Could not read json", e);
             TextView updateStatus = findViewById(R.id.update_status);
+            TextView maintainerName = findViewById(R.id.maintainer_name);
             if (findViewById(R.id.recycler_view).getVisibility() == View.GONE) {
                 findViewById(R.id.divider).setVisibility(View.GONE);
                 updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0);
+                maintainerName.setText("Unknown");
                 updateStatus.setText(getString(R.string.up_to_date_notification));
             }
             showSnackbar(R.string.snack_updates_check_failed, Snackbar.LENGTH_LONG);
@@ -467,6 +478,13 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
                     runOnUiThread(() -> findViewById(R.id.divider).setVisibility(View.GONE));
                 runOnUiThread(() -> {
                     if (!cancelled) {
+                        try {
+                            List<UpdateInfo> infos = Utils.parseJson(jsonFile, true);
+                            TextView maintainerName = findViewById(R.id.maintainer_name);
+                            maintainerName.setText(infos.get(0).getMaintainer());
+                        } catch (Exception e) {
+                            Log.d(TAG, "onFailure: Failed to fetch INfo from JSON");;
+                        }
                         TextView updateStatus = findViewById(R.id.update_status);
                         if (findViewById(R.id.recycler_view).getVisibility() == View.GONE) {
                             findViewById(R.id.divider).setVisibility(View.GONE);
@@ -637,7 +655,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             case Configuration.UI_MODE_NIGHT_YES:
                 return true;
             case Configuration.UI_MODE_NIGHT_NO:
-                return false;
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
                 return false;
         }
