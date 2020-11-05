@@ -23,6 +23,8 @@ public interface UpdateBaseInfo {
 
     long getTimestamp();
 
+    String getMaintainer();
+
     String getType();
 
     String getVersion();

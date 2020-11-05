@@ -374,6 +374,8 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
         List<String> updateIds = new ArrayList<>();
         List<UpdateInfo> sortedUpdates = controller.getUpdates();
         TextView updateStatus = findViewById(R.id.update_status);
+        TextView maintainerName = findViewById(R.id.maintainer_name);
+        maintainerName.setText(updates.get(0).getMaintainer());
         if (sortedUpdates.isEmpty()) {
             Log.d(TAG, "Up to date");
             findViewById(R.id.recycler_view).setVisibility(View.GONE);
@@ -637,7 +639,6 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
             case Configuration.UI_MODE_NIGHT_YES:
                 return true;
             case Configuration.UI_MODE_NIGHT_NO:
-                return false;
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
                 return false;
         }

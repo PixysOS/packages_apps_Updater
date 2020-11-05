@@ -91,11 +91,16 @@ public class Utils {
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
+        JSONArray maintainers = object.getJSONArray("maintainers");
         Update update = new Update();
         update.setTimestamp(object.getLong("datetime"));
         update.setName(object.getString("filename"));
         update.setDownloadId(object.getString("id"));
         update.setType(object.getString("romtype"));
+        if (maintainers.length() > 1)
+            update.setMaintainer(maintainers.getJSONObject(0).getString("name") + " and " + maintainers.getJSONObject(1).getString("name"));
+        else
+            update.setMaintainer(maintainers.getJSONObject(0).getString("name"));
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
         update.setVersion(object.getString("version"));
