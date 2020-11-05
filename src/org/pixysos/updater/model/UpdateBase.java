@@ -23,6 +23,7 @@ public class UpdateBase implements UpdateBaseInfo {
     private String mDownloadId;
     private long mTimestamp;
     private String mType;
+    private String mMaintainer;
     private String mVersion;
     private long mFileSize;
     private String mXdaForumUrl;
@@ -37,6 +38,7 @@ public class UpdateBase implements UpdateBaseInfo {
         mDownloadId = update.getDownloadId();
         mTimestamp = update.getTimestamp();
         mType = update.getType();
+        mMaintainer = update.getMaintainer();
         mVersion = update.getVersion();
         mFileSize = update.getFileSize();
         mXdaForumUrl = update.getXdaThreadUrl();
@@ -77,6 +79,15 @@ public class UpdateBase implements UpdateBaseInfo {
 
     public void setType(String type) {
         mType = type;
+    }
+
+    @Override
+    public String getMaintainer() {
+        return mMaintainer;
+    }
+
+    public void setMaintainer(String maintainer) {
+        mMaintainer = maintainer;
     }
 
     @Override

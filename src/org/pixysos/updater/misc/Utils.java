@@ -91,16 +91,27 @@ public class Utils {
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
+        JSONArray maintainerList = object.getJSONArray("maintainers");
+        StringBuilder maintainers = new StringBuilder();
         Update update = new Update();
-        update.setTimestamp(object.getLong("datetime"));
+        update.setTimestamp(object.getLong("timestamp"));
         update.setName(object.getString("filename"));
-        update.setDownloadId(object.getString("id"));
-        update.setType(object.getString("romtype"));
+        update.setDownloadId(object.getString("filehash"));
+        update.setType("official");
+        for (int i=0;i<maintainerList.length();i++) {
+            if (i == maintainerList.length() - 2)
+                maintainers.append(maintainerList.getJSONObject(i).getString("name")).append(" and ");
+            else if (i == maintainerList.length() - 1)
+                maintainers.append(maintainerList.getJSONObject(i).getString("name"));
+            else
+                maintainers.append(maintainerList.getJSONObject(i).getString("name")).append(", ");
+        }
+        update.setMaintainer(maintainers.toString());
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
         update.setVersion(object.getString("version"));
-        update.setXdaThreadUrl(object.getString("xda_thread_url"));
-        update.setDonationUrl(object.getString("donation_url"));
+        update.setXdaThreadUrl(object.getString("xda_thread"));
+        update.setDonationUrl(object.getString("donate_url"));
         return update;
     }
 
@@ -134,23 +145,16 @@ public class Utils {
             }
         }
         JSONObject obj = new JSONObject(json.toString());
-        JSONArray updatesList = obj.getJSONArray("response");
-        for (int i = 0; i < updatesList.length(); i++) {
-            if (updatesList.isNull(i)) {
-                continue;
+        try {
+            UpdateInfo update = parseJsonUpdate(obj);
+            if (!compatibleOnly || isCompatible(update)) {
+                updates.add(update);
+            } else {
+                Log.d(TAG, "Ignoring incompatible update " + update.getName());
             }
-            try {
-                UpdateInfo update = parseJsonUpdate(updatesList.getJSONObject(i));
-                if (!compatibleOnly || isCompatible(update)) {
-                    updates.add(update);
-                } else {
-                    Log.d(TAG, "Ignoring incompatible update " + update.getName());
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "Could not parse update object, index=" + i, e);
-            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Could not parse update object", e);
         }
-
         return updates;
     }
 

@@ -52,7 +52,8 @@
     -->
     <string name="update_found_notification">New update available</string>
     <string name="up_to_date_notification">You\'re up to date</string>
-    <string name="updater_server_url" translatable="false">https://raw.githubusercontent.com/PixysOS-Devices/official_devices/ten/{device}/build.json</string>
+    <string name="updater_server_url" translatable="false">https://beta.pixysos.com/ota/v1/{device}/eleven/{type}</string>
+    <string name="menu_changelog_url" translatable="false">https://raw.githubusercontent.com/PixysOS-Devices/changelogs/master/{device}.txt</string>
 
     <string name="verification_failed_notification">Verification failed</string>
     <string name="verifying_download_notification">Verifying update</string>
@@ -93,7 +94,6 @@
     <string name="menu_copy_url">Copy URL</string>
     <string name="menu_export_update">Export update</string>
     <string name="menu_show_changelog">Show changelog</string>
-    <string name="menu_changelog_url" translatable="false">https://raw.githubusercontent.com/PixysOS-Devices/changelogs/master/{device}.txt</string>
     <string name="menu_ab_perf_mode">Prioritize update process</string>
 
     <string name="snack_updates_found">New updates found</string>
