@@ -1,0 +1,83 @@
+diff --git a/src/org/pixysos/updater/UpdatesActivity.java b/src/org/pixysos/updater/UpdatesActivity.java
+index fe1ecfc..1b1f36c 100644
+--- a/src/org/pixysos/updater/UpdatesActivity.java
++++ b/src/org/pixysos/updater/UpdatesActivity.java
+@@ -375,7 +375,8 @@ public class UpdatesActivity extends UpdatesListActivity implements CurrentActio
+         List<UpdateInfo> sortedUpdates = controller.getUpdates();
+         TextView updateStatus = findViewById(R.id.update_status);
+         TextView maintainerName = findViewById(R.id.maintainer_name);
+-        maintainerName.setText(updates.get(0).getMaintainer());
++        if (updates.size() > 0)
++            maintainerName.setText(updates.get(0).getMaintainer());
+         if (sortedUpdates.isEmpty()) {
+             Log.d(TAG, "Up to date");
+             findViewById(R.id.recycler_view).setVisibility(View.GONE);
+diff --git a/src/org/pixysos/updater/misc/Constants.java b/src/org/pixysos/updater/misc/Constants.java
+index 6801d73..0cf413f 100644
+--- a/src/org/pixysos/updater/misc/Constants.java
++++ b/src/org/pixysos/updater/misc/Constants.java
+@@ -38,8 +38,6 @@ public final class Constants {
+     public static final String PROP_NEXT_DEVICE = "ro.updater.next_device";
+     public static final String PROP_RELEASE_TYPE = "ro.pixys.releasetype";
+     public static final String PROP_UPDATER_ALLOW_DOWNGRADING = "lineage.updater.allow_downgrading";
+-    public static final String PROP_UPDATER_URI = "pixys.updater.uri";
+-    public static final String PROP_CHANGELOG_URL = "pixys.changelog.uri";
+     public static final String PREF_INSTALL_OLD_TIMESTAMP = "install_old_timestamp";
+     public static final String PREF_INSTALL_NEW_TIMESTAMP = "install_new_timestamp";
+     public static final String PREF_INSTALL_PACKAGE_PATH = "install_package_path";
+diff --git a/src/org/pixysos/updater/misc/Utils.java b/src/org/pixysos/updater/misc/Utils.java
+index 4b66dd7..9796886 100644
+--- a/src/org/pixysos/updater/misc/Utils.java
++++ b/src/org/pixysos/updater/misc/Utils.java
+@@ -106,7 +106,10 @@ public class Utils {
+             else
+                 maintainers.append(maintainerList.getJSONObject(i).getString("name")).append(", ");
+         }
+-        update.setMaintainer(maintainers.toString());
++        if (maintainers.length() > 0)
++            update.setMaintainer(maintainers.toString());
++        else
++            update.setMaintainer("Unknown");
+         update.setFileSize(object.getLong("size"));
+         update.setDownloadUrl(object.getString("url"));
+         update.setVersion(object.getString("version"));
+@@ -137,7 +140,6 @@ public class Utils {
+             throws IOException, JSONException {
+         Log.d(TAG, file.getAbsolutePath());
+         List<UpdateInfo> updates = new ArrayList<>();
+-
+         StringBuilder json = new StringBuilder();
+         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+             for (String line; (line = br.readLine()) != null; ) {
+@@ -159,27 +161,19 @@ public class Utils {
+     }
+ 
+     public static String getServerURL(Context context) {
+-        String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
+-                SystemProperties.get(Constants.PROP_DEVICE));
++        String device = SystemProperties.get(Constants.PROP_DEVICE);
+         String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
+ 
+-        String serverUrl = SystemProperties.get(Constants.PROP_UPDATER_URI);
+-        if (serverUrl.trim().isEmpty()) {
+-            serverUrl = context.getString(R.string.updater_server_url);
+-        }
++        String serverUrl = context.getString(R.string.updater_server_url);
+ 
+         return serverUrl.replace("{device}", device)
+                 .replace("{type}", type);
+     }
+ 
+     public static String getChangelogURL(Context context) {
+-        String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
+-                SystemProperties.get(Constants.PROP_DEVICE));
++        String device = SystemProperties.get(Constants.PROP_DEVICE);
+ 
+-        String changelogUrl = SystemProperties.get(Constants.PROP_CHANGELOG_URL);
+-        if (changelogUrl.trim().isEmpty()) {
+-            changelogUrl = context.getString(R.string.menu_changelog_url);
+-        }
++        String changelogUrl = context.getString(R.string.menu_changelog_url);
+ 
+         return changelogUrl.replace("{device}", device);
+     }
