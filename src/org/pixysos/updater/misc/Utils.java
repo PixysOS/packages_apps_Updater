@@ -66,10 +66,7 @@ public class Utils {
     }
 
     public static File getDownloadPath(Context context) {
-        File path = new File(context.getFilesDir(), context.getString(R.string.download_path));
-        if (!path.exists())
-            path.mkdir();
-        return path;
+        return new File(context.getString(R.string.download_path));
     }
 
     public static File getExportPath(Context context) {
