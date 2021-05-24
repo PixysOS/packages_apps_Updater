@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eeeec3f_3b670c1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000063
+      },
+      "writtenOn": "2021-05-24T07:31:18Z",
+      "side": 1,
+      "message": "05-23 07:46:59.973  1098  1098 E System  : ******************************************\n05-23 07:46:59.973  1098  1098 E System  : ************ Failure starting system services\n05-23 07:46:59.973  1098  1098 E System  : java.lang.IllegalStateException: Signature|privileged permissions not in privapp-permissions whitelist: {org.pixysos.updater (/system/priv-app/Updater): android.permission.REBOOT, org.pixysos.updater (/system/priv-app/Updater): android.permission.RECOVERY, org.pixysos.updater (/system/priv-app/Updater): android.permission.ACCESS_CACHE_FILESYSTEM}",
+      "revId": "0fffc5e0ca27e5b0fe0106f19f446cd7b310aa47",
+      "serverId": "dc9c43de-f401-424a-9bd3-945633c9f028"
+    }
+  ]
+}
