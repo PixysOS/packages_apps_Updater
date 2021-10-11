@@ -25,8 +25,9 @@
             android:name="org.pixysos.updater.UpdatesActivity"
             android:excludeFromRecents="true"
             android:label="@string/display_name"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <intent-filter android:priority="1">
                 <action android:name="android.settings.SYSTEM_UPDATE_SETTINGS" />
 
@@ -58,7 +59,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.pixysos.updater.UpdatesCheckReceiver">
+        <receiver android:name="org.pixysos.updater.UpdatesCheckReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
