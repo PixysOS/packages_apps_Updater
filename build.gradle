@@ -29,12 +29,6 @@ android {
         targetSdkVersion 33
     }
 
-    lintOptions {
-        ignore 'ProtectedPermissions'
-        // These depend on translations
-        ignore 'ExtraTranslation', 'ImpliedQuantity', 'MissingQuantity', 'MissingTranslation'
-    }
-
     sourceSets {
         main {
             res.srcDirs = ['res']
@@ -56,6 +50,11 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
+
+    lint {
+        ignore 'ProtectedPermissions', 'ExtraTranslation', 'ImpliedQuantity', 'MissingQuantity', 'MissingTranslation'
+    }
+
 }
 
 dependencies {
