@@ -21,12 +21,12 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "org.pixysos.updater"
-        minSdkVersion 27
-        targetSdkVersion 28
+        minSdkVersion 33
+        targetSdkVersion 33
     }
 
     lintOptions {
